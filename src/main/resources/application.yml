@@ -1,0 +1,9 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/test
+  application:
+    name: mongoweb
+server:
+  port: 8888
+#mongodb://dev_xxx:dev_xxx@127.0.0.1:27017
