@@ -7,3 +7,16 @@ spring:
 server:
   port: 8888
 #mongodb://dev_xxx:dev_xxx@127.0.0.1:27017
+
+
+
+
+#配置日志
+logging:
+  level:
+    org.springframework.web: Info
+#    com.yiibai: DEBUG
+#  pattern:
+#    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+#    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+#  file: c:/logs/mylog.log

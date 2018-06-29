@@ -18,10 +18,15 @@
 *.zip
 *.tar.gz
 *.rar
+
+
 .gradle/
 .idea/vcs.xml
 .idea/workspace.xml
 .idea/libraries/*
+.idea/compiler.xml
+.idea/modules/springBootDemo_main.iml
+.idea/modules/springBootDemo_test.iml
 
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml

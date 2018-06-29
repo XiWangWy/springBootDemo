@@ -8,14 +8,15 @@ import org.springframework.web.bind.annotation.*;
  * Created by wangxi on 18/6/28.
  */
 
-@RestController
 @Slf4j
+@RestController
 @RequestMapping("bless")
 public class TestController {
 
     @RequestMapping(value = "test",method = {RequestMethod.POST})
     @ResponseBody
     public String test(@RequestBody JSONObject jsonObject){
+        log.info("~~~~~~~测试~~~~~~");
         return "测试";
     }
 }
