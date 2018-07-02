@@ -2,8 +2,6 @@ package com.bless;
 
 import lombok.extern.slf4j.Slf4j;
 import org.bson.internal.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
