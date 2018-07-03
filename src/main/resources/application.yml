@@ -4,11 +4,20 @@ spring:
       uri: mongodb://localhost:27017/test
   application:
     name: mongoweb
+  thymeleaf:
+      cache: false
+      prefix: classpath:/templates/
+      suffix: .html
+      encoding: UTF-8
+      content-type: text/html
+      mode: HTML5
+  http:
+    multipart:
+      max-file-size: 100Mb
+      maxRequestSize: 100Mb
 server:
   port: 8888
 #mongodb://dev_xxx:dev_xxx@127.0.0.1:27017
-
-
 
 
 #配置日志
