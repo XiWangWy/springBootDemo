@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -49,7 +50,7 @@ public class FileUploadController {
 //    }
 
     /**
-     * 上传文件即可以单个也可以多个同时穿
+     * 上传文件即可以单个也可以多个同时上传
      * @param request
      * @return
      */
@@ -70,17 +71,18 @@ public class FileUploadController {
      * 下载文件
      * @param res
      */
-    @RequestMapping(value = "download", method = RequestMethod.GET)
-    public void Download(HttpServletResponse res) {
-        String fileName = "time.png";
+    @RequestMapping(value = "/download", method = RequestMethod.GET)
+    public void Download(HttpServletResponse res) throws UnsupportedEncodingException {
+        String path = "./uploadFiles/hzw.jpeg";
+        String fileName = path.replaceAll(".*/","");
         res.setHeader("content-type", "application/octet-stream");
         res.setContentType("application/octet-stream");
-        res.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+        res.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
         byte[] buff = new byte[1024];
         BufferedInputStream bis = null;
         OutputStream os;
-//        String targetPath = "";
-        File downLoadFile = new File(fileName);
+
+        File downLoadFile = new File(path);
         if (!downLoadFile.exists()){
             try {
                 downLoadFile.createNewFile();

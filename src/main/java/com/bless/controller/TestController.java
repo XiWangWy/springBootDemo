@@ -18,24 +18,31 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Api(value = "TestController",description = "第一个测试Controller")
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("bless")
 public class TestController {
 
     @Autowired
     private UserRepository myUserRepository;
 
+    @RequestMapping(value = "/",method = {RequestMethod.GET})
+    public ModelAndView indexHtml() {
+        return new ModelAndView("index");
+    }
+
+    @RequestMapping(value = "/hello",method = {RequestMethod.GET})
+    public ModelAndView helloHtml() {
+        return new ModelAndView("hello");
+    }
+
+
+
     @ApiOperation(value = "测试接口1",notes = "测试接口介绍")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "userName",value = "用户名",required = true,dataType = "string"),
-//            @ApiImplicitParam(name = "pwd",value = "密码",required = true,dataType = "string")
-//    })
     @ApiImplicitParam(name = "user",value = "用户实体User",required = true,dataType = "User")
     @RequestMapping(value = "test",method = {RequestMethod.POST})
-//    @ResponseBody
-    public String test(@RequestBody User user){
+    public User test(@RequestBody User user){
         log.info("~~~~~~~成功~~~~~~");
-        return "成功";
+        return user;
     }
 
     @ApiOperation(value = "测试接口2",notes = "测试接口介绍")
@@ -46,6 +53,7 @@ public class TestController {
         User user = myUserRepository.findByUserName(name);
         return user;
     }
+    
 
 
 
