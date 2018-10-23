@@ -1,4 +1,4 @@
-package com.bless;
+package com.bless.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,8 +30,8 @@ public class Swagger2 {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("bless demo测试项目 RESTful APIs")
-                .description("bless demo项目后台api接口文档")
+                .title("demo测试项目 RESTful APIs")
+                .description("demo项目后台api接口文档")
                 .version("1.0")
                 .build();
     }

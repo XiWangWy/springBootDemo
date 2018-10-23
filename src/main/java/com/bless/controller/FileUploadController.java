@@ -93,11 +93,10 @@ public class FileUploadController {
         try {
             os = res.getOutputStream();
             bis = new BufferedInputStream(new FileInputStream(downLoadFile));
-            int i = bis.read(buff);
-            while (i != -1) {
-                os.write(buff, 0, buff.length);
+            int nRead;
+            while ((nRead = bis.read(buff, 0, buff.length)) != -1) {
+                os.write(buff, 0, nRead);
                 os.flush();
-                i = bis.read(buff);
             }
         } catch (IOException e) {
             e.printStackTrace();

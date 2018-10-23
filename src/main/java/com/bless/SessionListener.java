@@ -36,6 +36,9 @@ public class SessionListener implements HttpSessionListener,HttpSessionAttribute
     public void sessionCreated(HttpSessionEvent se) {
         log.info("--sessionCreated--");
         HttpSession session = se.getSession();
+        session.setMaxInactiveInterval(1*30);
+        log.info("sessionCreated ==== >  ID :  " + session.getId());
+        log.info("sessionCreated ==== >  getMaxInactiveInterval :  " + session.getMaxInactiveInterval());
         ServletContext application = session.getServletContext();
         // 在application范围由一个HashSet集保存所有的session
         HashSet sessions = (HashSet) application.getAttribute("sessions");
@@ -52,5 +55,14 @@ public class SessionListener implements HttpSessionListener,HttpSessionAttribute
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         log.info("--sessionDestroyed--");
+        HttpSession session = se.getSession();
+        log.info("deletedSessionId: "+session.getId());
+        System.out.println(session.getCreationTime());
+        System.out.println(session.getLastAccessedTime());
+        ServletContext application = session.getServletContext();
+        HashSet sessions = (HashSet) application.getAttribute("sessions");
+        // 销毁的session均从HashSet集中移除
+        sessions.remove(session);
+
     }
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by wangxi on 18/7/2.
@@ -19,6 +20,8 @@ public class User implements Serializable{
     private String userName;
     @ApiModelProperty("用户密码")
     private String passWord;
+    @ApiModelProperty("用户角色")
+    private ArrayList<String> roles;
 
     public User(String userName, String passWord){
         this.userName = userName;
@@ -34,6 +37,8 @@ public class User implements Serializable{
                 "id='" + id + '\'' +
                 ", userName='" + userName + '\'' +
                 ", passWord='" + passWord + '\'' +
+                ", roles=" + roles +
                 '}';
     }
+
 }

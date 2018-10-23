@@ -7,6 +7,8 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.ArrayList;
+
 /**
  * Created by wangxi on 18/7/2.
  */
@@ -15,6 +17,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface UserRepository extends MongoRepository<User,String> {
     @Cacheable(key = "#p0")
     User findByUserName(String username);
+
+    ArrayList<User> findAll();
 
 
     @CachePut(key = "#p0.userName")
