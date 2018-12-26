@@ -1,13 +1,10 @@
 package com.bless.config;
 
 import com.bless.Security.JwtAuthenticationEntryPoint;
-import com.bless.Security.JwtAuthorizationTokenFilter;
-import com.bless.Security.JwtTokenUtil;
+import com.bless.Filter.JwtAuthorizationTokenFilter;
 import com.bless.Service.MyUserDetailService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -60,6 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // we don't need CSRF because our token is invulnerable
                 .csrf().disable()
 
+                //统一异常处理
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint()).and()
 
                 // don't create session
@@ -69,6 +67,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // 对于获取token的rest api要允许匿名访问
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/webSocket/**").permitAll()
+                .antMatchers("/socket.io/**").permitAll()
+
 
                 //swagger
                 .antMatchers("/swagger-ui.html").permitAll()

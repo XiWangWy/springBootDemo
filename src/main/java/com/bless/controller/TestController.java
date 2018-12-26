@@ -2,7 +2,9 @@ package com.bless.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bless.Entity.JSONResult;
+import com.bless.Entity.Person;
 import com.bless.Entity.User;
+import com.bless.Repository.PersonRepository;
 import com.bless.Repository.UserRepository;
 import com.bless.Security.AuthenticationException;
 import com.bless.Security.JwtTokenUtil;
@@ -26,7 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Created by wangxi on 18/6/28.
@@ -52,6 +54,9 @@ public class TestController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    private PersonRepository personRepository;
+
 //    @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "/",method = {RequestMethod.GET})
     public ModelAndView indexHtml() {
@@ -65,10 +70,6 @@ public class TestController {
     }
 
 
-
-
-
-
     @ApiOperation(value = "测试接口1",notes = "测试接口介绍")
     @ApiImplicitParam(name = "user",value = "用户实体User",required = true,dataType = "User")
     @RequestMapping(value = "test",method = {RequestMethod.POST})
@@ -77,36 +78,13 @@ public class TestController {
         return ResultUtil.success(user);
     }
 
-    @ApiOperation(value = "测试接口2",notes = "测试接口介绍")
-    @ApiImplicitParam(name = "username",value = "用户名称",required = true,dataType = "JSONObject")
-    @RequestMapping(value = "findUser",method = {RequestMethod.POST})
-    public JSONResult findUser(@RequestBody JSONObject username,HttpServletResponse httpServletResponse,HttpServletRequest httpServletRequest){
-        String name = username.getString("username");
-        User user = myUserRepository.findByUserName(name);
-        HttpSession session = httpServletRequest.getSession(true);
-
-
-        if (user != null){
-            String tmpName = (String) session.getAttribute(name);
-            if (tmpName != null && !tmpName.equals("")){
-                if (!session.isNew()){
-                    log.info("已经登录用户");
-                    log.info("session====>" + session.getId());
-                    log.info("session====> name " + tmpName);
-                }
-
-            }else {
-                if (session.isNew()){
-                    log.info("第一次调用登录接口 设置session Attribute====>");
-                    session.setAttribute(name,name);
-                }
-
-            }
-        }else {
-            log.info("用户名密码错误====>");
-        }
-        return ResultUtil.success(user);
+    @GetMapping(value = "search")
+    public JSONResult getPerson(@RequestParam("name") String name){
+//        List<Person> personList = personRepository.findByName(name);
+        List<Person> personList = personRepository.findTest(name);
+        return ResultUtil.success(personList);
     }
+
 
 
     @PostMapping(value = "getall")
@@ -114,6 +92,10 @@ public class TestController {
     public JSONResult getUsers(){
         return ResultUtil.success(myUserRepository.findAll());
     }
+
+
+
+
 
     @PostMapping(value = "auth")
     public JSONResult login(@RequestBody User user){

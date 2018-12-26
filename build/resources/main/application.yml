@@ -9,6 +9,8 @@ jwt:
 
 
 spring:
+
+
   data:
     mongodb:
       uri: mongodb://localhost:27017/test
@@ -49,9 +51,19 @@ spring:
       INDENT_OUTPUT: true
 
 
-
+#mysql数据库配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/FirstDataBase
+    username: root
+    password: 123
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+#端口配置
 server:
-  port: 8000
+  port: 8001
 #  servlet:
 #    session:
 #      timeout: 10
@@ -62,6 +74,7 @@ logging:
   level:
     org.springframework.web: DEBUG
     org.springframework.data.mongodb.core: DEBUG
+    org.springframework.data: DEBUG
 #spring.jackson.serialization.INDENT_OUTPUT=true
 
 #    com.yiibai: DEBUG

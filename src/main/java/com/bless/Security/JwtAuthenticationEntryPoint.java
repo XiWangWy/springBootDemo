@@ -31,9 +31,9 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
         if(response.getStatus() != 200){
             log.info("错误状态码：" + response.getStatus());
         }
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         String reason = "错误原因：" + authException.getMessage();
-        JSONResult result = ResultUtil.error(HttpServletResponse.SC_FORBIDDEN,reason);
+        JSONResult result = ResultUtil.error(HttpServletResponse.SC_UNAUTHORIZED,reason);
         response.getWriter().write(JSONObject.toJSONString(result,true));
     }
 }
