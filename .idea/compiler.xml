@@ -7,6 +7,10 @@
     <bytecodeTargetLevel>
       <module name="springBootDemo_main" target="1.8" />
       <module name="springBootDemo_test" target="1.8" />
+      <module name="test2_main" target="1.8" />
+      <module name="test2_test" target="1.8" />
+      <module name="webSocket_main" target="1.8" />
+      <module name="webSocket_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

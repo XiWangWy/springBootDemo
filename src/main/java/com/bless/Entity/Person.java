@@ -5,7 +5,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 //import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by wangxi on 2018/12/6.
@@ -30,6 +32,8 @@ public class Person {
     @JoinColumn(name = "city_id")
     private City city;
 
+    @OneToMany(mappedBy = "person")
+    private List<Car> cars;
 
     public Person(String name, Integer number, Date birthday, Integer shengao) {
         this.name = name;
