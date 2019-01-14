@@ -53,7 +53,7 @@ spring:
 
 #mysql数据库配置
   datasource:
-    url: jdbc:mysql://localhost:3306/FirstDataBase
+    url: jdbc:mysql://localhost:3306/FirstDataBase?characterEncoding=utf-8
     username: root
     password: 123
     driver-class-name: com.mysql.jdbc.Driver

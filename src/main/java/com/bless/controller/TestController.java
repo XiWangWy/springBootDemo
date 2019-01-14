@@ -1,10 +1,10 @@
 package com.bless.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.bless.Entity.JSONResult;
-import com.bless.Entity.Person;
-import com.bless.Entity.User;
+import com.bless.Entity.*;
+import com.bless.Repository.PeopleRepository;
 import com.bless.Repository.PersonRepository;
+import com.bless.Repository.ProjectRepository;
 import com.bless.Repository.UserRepository;
 import com.bless.Security.AuthenticationException;
 import com.bless.Security.JwtTokenUtil;
@@ -17,6 +17,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -57,6 +61,17 @@ public class TestController {
     @Autowired
     private PersonRepository personRepository;
 
+    @Autowired
+    private PeopleRepository peopleRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+//    private MongoC
+
 //    @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "/",method = {RequestMethod.GET})
     public ModelAndView indexHtml() {
@@ -81,8 +96,33 @@ public class TestController {
     @GetMapping(value = "search")
     public JSONResult getPerson(@RequestParam("name") String name){
 //        List<Person> personList = personRepository.findByName(name);
-        List<Person> personList = personRepository.findTest(name);
-        return ResultUtil.success(personList);
+//        List<Person> personList = personRepository.findTest(name);
+//        return ResultUtil.success(personList);
+        List<People> peopleList = peopleRepository.findByName(name);
+        return ResultUtil.success(peopleList);
+    }
+
+    @GetMapping(value = "search/project")
+    public JSONResult getProject(@RequestParam("name") String name){
+//        List<Person> personList = personRepository.findByName(name);
+//        List<Person> personList = personRepository.findTest(name);
+        log.info("查询name ===>" + name);
+        List<Project> projectList = projectRepository.findByName(name);
+
+//        Optional<Project> projectList = projectRepository.findById(1L);
+        return ResultUtil.success(projectList);
+    }
+
+    @GetMapping(value = "search/testMongo")
+    public JSONResult testMongo(@RequestParam("name") String name){
+        //project操作居然自动重命名了 用药 很奇怪
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.project("msdata.用药","recordId"),
+                Aggregation.unwind("用药")
+        );
+        AggregationResults<JSONObject> results = mongoTemplate.aggregate(aggregation,"el",JSONObject.class);
+        log.info(results.getMappedResults().toString());
+        return ResultUtil.success(results.getMappedResults());
     }
 
 

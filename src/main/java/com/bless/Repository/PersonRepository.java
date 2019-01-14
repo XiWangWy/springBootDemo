@@ -16,4 +16,5 @@ public interface PersonRepository  extends CrudRepository<Person,Long>{
 
     @Query(value = "select * from Person u where u.name=?1", nativeQuery = true)
     List<Person> findTest(String name);
+
 }
