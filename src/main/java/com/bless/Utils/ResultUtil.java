@@ -20,9 +20,12 @@ public class ResultUtil {
      */
     public static JSONResult success(Object object,String msg){
         JSONResult result = new JSONResult();
-        result.setCode(0);
-        result.setMsg(msg);
-        result.setData(object);
+//        result.setCode(0);
+//        result.setMsg(msg);
+//        result.setData(object);
+        result.put("code",0);
+        result.put("msg",msg);
+        result.put("data",object);
         return result;
     }
 
@@ -33,8 +36,10 @@ public class ResultUtil {
 
     public static  JSONResult error(Integer code,String msg){
         JSONResult result = new JSONResult();
-        result.setCode(code);
-        result.setMsg(msg);
+//        result.setCode(code);
+//        result.setMsg(msg);
+        result.put("code",0);
+        result.put("msg",msg);
         return result;
     }
 }

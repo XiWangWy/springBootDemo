@@ -1,17 +1,21 @@
 package com.bless.Entity;
 
-import com.fasterxml.jackson.annotation.*;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by wangxi on 2019/1/11.
  */
 @Data
 @Entity
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-public class Shoe {
+public class Shoe{
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -20,12 +24,18 @@ public class Shoe {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "people_id")
-    @JsonBackReference
+    @JoinColumn(name = "people_id",referencedColumnName = "id")
+    @JsonIgnoreProperties("shoe")
     private People people;
 
 
-    public void setPeople(People people) {
-        this.people = people;
+
+    @Override
+    public String toString() {
+        return "Shoe{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", people=" + people +
+                '}';
     }
 }

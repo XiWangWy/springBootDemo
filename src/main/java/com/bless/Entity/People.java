@@ -1,9 +1,7 @@
 package com.bless.Entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,8 +14,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "people")
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
-public class People {
+public class People{
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -32,8 +29,19 @@ public class People {
 
 //    @OneToMany(fetch=FetchType.LAZY,mappedBy = "people")
 //    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-//    @OneToMany(mappedBy = "people")
-//    @JsonBackReference
+
     @OneToMany(mappedBy = "people")
+    //该注解解决序列化的时候 出现循环引用的问题 必须最后http结果JSONResult 集成JSONObject 使用该注解才会有效果
+    @JsonIgnoreProperties("people")
     private List<Shoe> shoe;
+
+    @Override
+    public String toString() {
+        return "People{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", project=" + project +
+                ", shoe=" + shoe +
+                '}';
+    }
 }

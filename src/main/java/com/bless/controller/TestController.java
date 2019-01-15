@@ -1,11 +1,10 @@
 package com.bless.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.bless.Entity.*;
-import com.bless.Repository.PeopleRepository;
-import com.bless.Repository.PersonRepository;
-import com.bless.Repository.ProjectRepository;
-import com.bless.Repository.UserRepository;
+import com.bless.Repository.*;
 import com.bless.Security.AuthenticationException;
 import com.bless.Security.JwtTokenUtil;
 import com.bless.Service.JwtAuthenticationResponse;
@@ -70,6 +69,9 @@ public class TestController {
     @Autowired
     private MongoTemplate mongoTemplate;
 
+    @Autowired
+    private ShoeRepository shoeRepository;
+
 //    private MongoC
 
 //    @PreAuthorize("hasRole('USER')")
@@ -97,10 +99,20 @@ public class TestController {
     public JSONResult getPerson(@RequestParam("name") String name){
 //        List<Person> personList = personRepository.findByName(name);
 //        List<Person> personList = personRepository.findTest(name);
-//        return ResultUtil.success(personList);
         List<People> peopleList = peopleRepository.findByName(name);
         return ResultUtil.success(peopleList);
     }
+
+    @GetMapping(value = "search/shoe")
+    public JSONResult getShoe(@RequestParam("name") String name){
+//        List<Person> personList = personRepository.findByName(name);
+//        List<Person> personList = personRepository.findTest(name);
+//        return ResultUtil.success(personList);
+        List<Shoe> shoeList = shoeRepository.findByName(name);
+        return ResultUtil.success(shoeList);
+    }
+
+
 
     @GetMapping(value = "search/project")
     public JSONResult getProject(@RequestParam("name") String name){
