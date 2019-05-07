@@ -1,7 +1,12 @@
 package com.bless;
 
+import com.bless.Entity.Test;
+import com.bless.Repository.TestRepository;
+import com.bless.Service.TestService;
+import com.bless.enums.Gender;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.internal.Base64;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
@@ -32,20 +37,26 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 @SpringBootApplication
 @EnableCaching
 @ServletComponentScan
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 10)
+@EnableRabbit
+//@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 10)
 //@EnableJpaRepositories("com.bless.Repository")
 //@EntityScan("com.bless.Entity")
 public class Application implements CommandLineRunner{
+
+    @Autowired
+    private TestRepository testRepository;
+
     public static void main(String[] args) {
-        String fozuStr = "ICAgICAgICAgICAgICAgICAgIF9vb09vb18KICAgICAgICAgICAgICAgICAgbzg4ODg4ODhvCiAgICAgICAgICAgICAgICAgIDg4IiAuICI4OAogICAgICAgICAgICAgICAgICAofCAtXy0gfCkKICAgICAgICAgICAgICAgICAgT1wgID0gIC9PCiAgICAgICAgICAgICAgIF9fX18vYC0tLSdcX19fXwogICAgICAgICAgICAgLicgIFxcfCAgICAgfC8vICBgLgogICAgICAgICAgICAvICBcXHx8fCAgOiAgfHx8Ly8gIFwKICAgICAgICAgICAvICBffHx8fHwgLTotIHx8fHx8LSAgXAogICAgICAgICAgIHwgICB8IFxcXCAgLSAgLy8vIHwgICB8CiAgICAgICAgICAgfCBcX3wgICcnXC0tLS8nJyAgfCAgIHwKICAgICAgICAgICBcICAuLVxfXyAgYC1gICBfX18vLS4gLwogICAgICAgICBfX19gLiAuJyAgLy0tLi0tXCAgYC4gLiBfXwogICAgICAuIiIgJzwgIGAuX19fXF88fD5fL19fXy4nICA+JyIiLgogICAgIHwgfCA6ICBgLSBcYC47YFwgXyAvYDsuYC8gLSBgIDogfCB8CiAgICAgXCAgXCBgLS4gICBcXyBfX1wgL19fIF8vICAgLi1gIC8gIC8KPT09PT09YC0uX19fX2AtLl9fX1xfX19fXy9fX18uLWBfX19fLi0nPT09PT09CiAgICAgICAgICAgICAgICAgICBgPS0tLT0nCl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXgogICAgICAgICAgICAgICAgIOS9m+elluS/neS9kSAgICAgICDmsLjml6BCVUc=";
-        byte[] decode = Base64.decode(String.valueOf(fozuStr.toCharArray()));
-        log.info("\n"+new String(decode));
         SpringApplication.run(Application.class, args);
     }
 
 
     @Autowired
     private MongoDbFactory mongoDbFactory;
+
+    @Autowired
+    private TestService testService;
+
     @Bean
     public MongoTemplate mongoTemplate() throws Exception {
         // 去掉_class
@@ -57,7 +68,23 @@ public class Application implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
-
+//        testService.es();
+//        Test test = new Test();
+//        test.setGender(Gender.famale);
+//        test.setName("测试");
+//        testRepository.save(test);
+//
+//        Test test1 = new Test();
+//        test1.setGender(Gender.male);
+//        test1.setName("测试1");
+//        testRepository.save(test1);
+//
+//        Test test2 = new Test();
+//        test2.setGender(Gender.unknow);
+//        test2.setName("测试3");
+//        testRepository.save(test2);
+//        log.info(Gender.unknow.name());
+//        log.info(""+Gender.unknow.ordinal());
     }
 
 }

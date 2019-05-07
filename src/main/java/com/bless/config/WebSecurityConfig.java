@@ -67,6 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // 对于获取token的rest api要允许匿名访问
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/rabbit/*").permitAll()
                 .antMatchers("/search").permitAll()
                 .antMatchers("/search/**").permitAll()
                 .antMatchers("/webSocket/**").permitAll()

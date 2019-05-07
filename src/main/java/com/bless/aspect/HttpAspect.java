@@ -1,7 +1,6 @@
 package com.bless.aspect;
 
 import com.alibaba.fastjson.JSONObject;
-import com.sun.xml.internal.ws.client.ResponseContext;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -9,12 +8,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Arrays;
 /**
  * Created by wangxi on 18/7/26.
  * AOP面向切面  处理某些统一拦截的模块

@@ -137,6 +137,11 @@ public class TestController {
         return ResultUtil.success(results.getMappedResults());
     }
 
+    @GetMapping(value = "search/wx")
+    public Doc wx(){
+
+        return new Doc();
+    }
 
 
     @PostMapping(value = "getall")
