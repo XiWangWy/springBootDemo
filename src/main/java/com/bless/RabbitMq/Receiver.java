@@ -4,6 +4,7 @@ import com.bless.Entity.Message;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.impl.AMQImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.annotation.RabbitListeners;
@@ -31,7 +32,7 @@ public class Receiver {
     public void handleHello(String message) throws Exception {
         System.out.println("Hello消费消息");
         System.out.println(new String(message));
-        throw new RuntimeException("抛出异常");
+        throw new AmqpRejectAndDontRequeueException("抛出异常");
     }
 
     /**

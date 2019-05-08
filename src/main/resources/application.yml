@@ -79,10 +79,10 @@ spring:
     listener:
       simple:
         retry:
-          max-attempts: 3
+          max-attempts: 5
           initial-interval: 3000
           enabled: true
-        default-requeue-rejected: true
+        default-requeue-rejected: false
 
 #端口配置
 server:

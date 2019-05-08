@@ -48,7 +48,7 @@ public class RabbitMqController {
 //            设置编码
             messageProperties.setContentEncoding("utf-8");
 //            设置过期时间10*1000毫秒
-            messageProperties.setExpiration("5000");
+//            messageProperties.setExpiration("5000");
             return message;
         };
 
