@@ -9,11 +9,15 @@ jwt:
 
 
 spring:
-
+  profiles:
+    active: dev
 
   data:
     mongodb:
       uri: mongodb://localhost:27017/test
+    elasticsearch:
+      cluster-name: wangxi's ES
+      cluster-nodes: localhost:9300
 
   application:
     name: mongoweb
@@ -51,24 +55,15 @@ spring:
       INDENT_OUTPUT: true
 
 
-#mysql数据库配置
-#  datasource:
-#    url: jdbc:mysql://localhost:3306/FirstDataBase?characterEncoding=utf-8
-#    username: root
-#    password: 123
-#    driver-class-name: com.mysql.jdbc.Driver
-#  jpa:
-#    show-sql: true
-#    hibernate:
-#      ddl-auto: none
+#mysql 多数据 spring boot 2.x数据库配置
   datasource:
       old:
-          url: jdbc:mysql://localhost:3306/FirstDataBase?useUnicode=true&characterEncoding=UTF-8
+          url: jdbc:mysql://localhost:3306/FirstDataBase?useUnicode=true&characterEncoding=UTF-8&useSSL=false
           username: root
           password: 123
           driver-class-name: com.mysql.jdbc.Driver
       new:
-          url: jdbc:mysql://localhost:3306/SecondDataBase?useUnicode=true&characterEncoding=UTF-8
+          url: jdbc:mysql://localhost:3306/SecondDataBase?useUnicode=true&characterEncoding=UTF-8&useSSL=false
           username: root
           password: 123
           driver-class-name: com.mysql.jdbc.Driver
@@ -79,26 +74,32 @@ spring:
             show_sql: true
             format_sql: true
             ddl-auto: none
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        retry:
+          max-attempts: 5
+          initial-interval: 3000
+          enabled: true
+        default-requeue-rejected: false
+    virtual-host: wx
+
 
 #端口配置
 server:
-  port: 8001
-#  servlet:
-#    session:
-#      timeout: 10
-#mongodb://dev_xxx:dev_xxx@127.0.0.1:27017
+  port: 8005
 
 #配置日志
 logging:
   level:
-    org.springframework.web: DEBUG
-    org.springframework.data.mongodb.core: DEBUG
-    org.springframework.data: DEBUG
-#spring.jackson.serialization.INDENT_OUTPUT=true
+    org.springframework.web: INFO
+    org.springframework.data.mongodb.core: INFO
+    org.springframework.data: INFO
 
-#    com.yiibai: DEBUG
-#  pattern:
-#    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
-#    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
-#  file: c:/logs/mylog.log
+
+
 

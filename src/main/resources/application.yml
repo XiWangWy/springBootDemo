@@ -15,6 +15,9 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/test
+    elasticsearch:
+      cluster-name: wangxi's ES
+      cluster-nodes: localhost:9300
 
   application:
     name: mongoweb
@@ -83,10 +86,12 @@ spring:
           initial-interval: 3000
           enabled: true
         default-requeue-rejected: false
+    virtual-host: wx
+
 
 #端口配置
 server:
-  port: 8002
+  port: 8005
 
 #配置日志
 logging:

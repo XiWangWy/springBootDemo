@@ -1,34 +1,28 @@
 package com.bless;
 
-import com.bless.Entity.Test;
+import com.bless.Elasticsearch.ESService;
 import com.bless.Repository.TestRepository;
 import com.bless.Service.TestService;
-import com.bless.enums.Gender;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.internal.Base64;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Primary;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
 import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
-import org.springframework.data.redis.core.RedisOperations;
-import org.springframework.session.data.redis.RedisOperationsSessionRepository;
-import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+
+import java.util.HashMap;
+import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by wangxi on 18/6/28.
@@ -47,15 +41,18 @@ public class Application implements CommandLineRunner{
     private TestRepository testRepository;
 
     public static void main(String[] args) {
+        System.setProperty("es.set.netty.runtime.available.processors", "false");
         SpringApplication.run(Application.class, args);
     }
-
 
     @Autowired
     private MongoDbFactory mongoDbFactory;
 
     @Autowired
     private TestService testService;
+
+    @Autowired
+    private ESService esService;
 
     @Bean
     public MongoTemplate mongoTemplate() throws Exception {
@@ -68,6 +65,7 @@ public class Application implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
+        esService.test();
 //        testService.es();
 //        Test test = new Test();
 //        test.setGender(Gender.famale);
@@ -85,6 +83,18 @@ public class Application implements CommandLineRunner{
 //        testRepository.save(test2);
 //        log.info(Gender.unknow.name());
 //        log.info(""+Gender.unknow.ordinal());
+
+        parseLetterTemplate("{{姓名}}肺功能检查结果为{{高危}}，情况危重需要立即处置。");
     }
+
+    private void parseLetterTemplate(String letterTemplate){
+        String regex = "\\{\\{([^}]*)}}";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(letterTemplate);
+        while (matcher.find()){
+            System.out.println(matcher.group().replaceAll(regex,"$1"));
+        }
+    }
+
 
 }

@@ -83,6 +83,10 @@ dependencies {
     //消息中间件rabbitmq
     compile("org.springframework.boot:spring-boot-starter-amqp")
 
+    //Elasticsearch
+//    compile group: 'org.elasticsearch', name: 'elasticsearch', version: '6.7.0'
+
+    compile("org.springframework.boot:spring-boot-starter-data-elasticsearch")
 
 }
 repositories {
