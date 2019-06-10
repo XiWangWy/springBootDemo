@@ -1,8 +1,10 @@
 package com.bless;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bless.Elasticsearch.ESService;
 import com.bless.Repository.TestRepository;
 import com.bless.Service.TestService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +56,9 @@ public class Application implements CommandLineRunner{
     @Autowired
     private ESService esService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Bean
     public MongoTemplate mongoTemplate() throws Exception {
         // 去掉_class
@@ -84,7 +89,12 @@ public class Application implements CommandLineRunner{
 //        log.info(Gender.unknow.name());
 //        log.info(""+Gender.unknow.ordinal());
 
-        parseLetterTemplate("{{姓名}}肺功能检查结果为{{高危}}，情况危重需要立即处置。");
+        JSONObject ob = new JSONObject();
+        ob.put("IdName","123");
+        ob.put("PatientId","123");
+        log.info(objectMapper.convertValue(ob,JSONObject.class).toJSONString());
+
+//        parseLetterTemplate("{{姓名}}肺功能检查结果为{{高危}}，情况危重需要立即处置。");
     }
 
     private void parseLetterTemplate(String letterTemplate){

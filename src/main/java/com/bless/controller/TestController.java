@@ -138,9 +138,13 @@ public class TestController {
     }
 
     @GetMapping(value = "search/wx")
-    public Doc wx(){
-
-        return new Doc();
+    public Message wx(){
+        Message message = new Message();
+        message.setSendMessage("hhhh");
+        JSONObject jsonObject =  new JSONObject();
+        jsonObject.put("idName","sss");
+        message.setExtendObj(jsonObject);
+        return message;
     }
 
 
