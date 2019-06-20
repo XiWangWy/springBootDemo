@@ -84,9 +84,13 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-amqp")
 
     //Elasticsearch
-//    compile group: 'org.elasticsearch', name: 'elasticsearch', version: '6.7.0'
+    compile group: 'org.elasticsearch', name: 'elasticsearch', version: '6.7.0'
 
-    compile("org.springframework.boot:spring-boot-starter-data-elasticsearch")
+    //jpa方式的es + 9300端口
+//    compile("org.springframework.boot:spring-boot-starter-data-elasticsearch")
+
+    //Java Rest Client API 6.7 9200 http端口 具体看配置
+    compile 'org.elasticsearch.client:elasticsearch-rest-high-level-client:6.7.0'
 
     compile group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: '2.18.1'
 

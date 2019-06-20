@@ -24,11 +24,13 @@ public class CollectTest<T,R> {
 //        Function<Integer,String> function = (intStr) ->  intStr.toString() +  "hh";
 //        String ss = collectTest.test(function,15);
 //        System.out.println(ss);
-        URL[] urls = sun.misc.Launcher.getBootstrapClassPath().getURLs();
-        for(URL url : urls){
-            System.out.println(url.toExternalForm());
-        }
-
+//        URL[] urls = sun.misc.Launcher.getBootstrapClassPath().getURLs();
+//        for(URL url : urls){
+//            System.out.println(url.toExternalForm());
+//        }
+        String idName = "aaa";
+        String ss = String.format("*%s*",idName);
+        System.out.println(ss);
     }
 
     private R test(Function<T,R> function, T t){
