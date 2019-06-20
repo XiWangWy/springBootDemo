@@ -88,6 +88,8 @@ dependencies {
 
     compile("org.springframework.boot:spring-boot-starter-data-elasticsearch")
 
+    compile group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: '2.18.1'
+
 }
 repositories {
     maven {

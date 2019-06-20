@@ -42,7 +42,7 @@ public class Receiver {
     @RabbitListener(queues = "direct")
     @RabbitHandler
     public void handleDirect(String message){
-//        log.info("当前线程" + Thread.currentThread().getName() + Thread.currentThread().getId());
+//        log.info("当前线程" + ThreadTest.currentThread().getName() + ThreadTest.currentThread().getId());
         System.out.println("Direct消费消息");
         System.out.println(new String(message));
     }

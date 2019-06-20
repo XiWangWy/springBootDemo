@@ -5,7 +5,9 @@ import com.bless.Elasticsearch.ESService;
 import com.bless.Repository.TestRepository;
 import com.bless.Service.TestService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.boot.model.source.internal.hbm.MappingDocument;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -25,6 +27,7 @@ import java.util.HashMap;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Created by wangxi on 18/6/28.
@@ -70,7 +73,8 @@ public class Application implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
-        esService.test();
+
+//        esService.test();
 //        testService.es();
 //        Test test = new Test();
 //        test.setGender(Gender.famale);
@@ -89,10 +93,10 @@ public class Application implements CommandLineRunner{
 //        log.info(Gender.unknow.name());
 //        log.info(""+Gender.unknow.ordinal());
 
-        JSONObject ob = new JSONObject();
-        ob.put("IdName","123");
-        ob.put("PatientId","123");
-        log.info(objectMapper.convertValue(ob,JSONObject.class).toJSONString());
+//        JSONObject ob = new JSONObject();
+//        ob.put("IdName","123");
+//        ob.put("PatientId","123");
+//        log.info(objectMapper.convertValue(ob,JSONObject.class).toJSONString());
 
 //        parseLetterTemplate("{{姓名}}肺功能检查结果为{{高危}}，情况危重需要立即处置。");
     }

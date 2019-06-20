@@ -2,9 +2,13 @@ package com.bless.java8;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -20,10 +24,10 @@ public class CollectTest<T,R> {
 //        Function<Integer,String> function = (intStr) ->  intStr.toString() +  "hh";
 //        String ss = collectTest.test(function,15);
 //        System.out.println(ss);
-          int a = 7;
-          System.out.println(a & 123);
-
-
+        URL[] urls = sun.misc.Launcher.getBootstrapClassPath().getURLs();
+        for(URL url : urls){
+            System.out.println(url.toExternalForm());
+        }
 
     }
 
