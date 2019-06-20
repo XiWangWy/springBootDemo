@@ -1,5 +1,6 @@
 package com.bless.java8;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.netty.util.concurrent.DefaultThreadFactory;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,9 +25,6 @@ public class ThreadTest {
     static AtomicInteger atomicInteger = new AtomicInteger();
 
     public static void main(String[] args) {
-
-//        ThreadFactoryBuilder threadFactoryBuilder = new ThreadFactoryBuilder();
-//        threadFactoryBuilder.set
 
         ThreadFactory  threadFactory = new DefaultThreadFactory("my_test_thread");
 
@@ -53,6 +51,9 @@ public class ThreadTest {
         threadPoolExecutor.submit(new MyTask("task10"));
         threadPoolExecutor.submit(new MyTask("task11"));
         threadPoolExecutor.submit(new MyTask("task12"));
+
+        threadPoolExecutor.submit(new MyTask("task13"));
+        threadPoolExecutor.submit(new MyTask("task14"));
 
         while (true){
             try {
