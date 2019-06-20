@@ -57,7 +57,7 @@ public class ThreadTest {
         while (true){
             try {
                 Thread.sleep(1000);
-                log.info("时间计数：{} 秒" ,atomicInteger.incrementAndGet());
+                log.info("时间计数：{} 秒,当前活跃线程数：{}" ,atomicInteger.incrementAndGet(),threadPoolExecutor.getActiveCount());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
