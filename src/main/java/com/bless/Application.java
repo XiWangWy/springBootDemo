@@ -1,7 +1,7 @@
 package com.bless;
 
 import com.alibaba.fastjson.JSONObject;
-import com.bless.Elasticsearch.ESService;
+//import com.bless.Elasticsearch.ESService;
 import com.bless.Repository.TestRepository;
 import com.bless.Service.TestService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,8 +56,8 @@ public class Application implements CommandLineRunner{
     @Autowired
     private TestService testService;
 
-    @Autowired
-    private ESService esService;
+//    @Autowired
+//    private ESService esService;
 
     @Autowired
     private ObjectMapper objectMapper;
