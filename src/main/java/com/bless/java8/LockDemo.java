@@ -14,11 +14,11 @@ public class LockDemo {
 
     static ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
     private static int count;
-
+    private static Object object = new Object();
 
     public static void main(String[] args) {
 
-        new Thread(()-> readWrite()).start();
+
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -27,6 +27,14 @@ public class LockDemo {
         for (int i = 0; i < 10; i++) {
             new Thread(() -> test()).start();
         }
+        new Thread(()-> modify()).start();
+
+//        sycTest();
+//        for (int i = 0; i < 10; i++) {
+//           new Thread(()-> readWrite2()).start();
+//        }
+
+
 
     }
 
@@ -50,7 +58,7 @@ public class LockDemo {
 
         log.error("获取到写锁===》{}",Thread.currentThread().getName());
         try {
-            Thread.sleep(10000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -62,30 +70,42 @@ public class LockDemo {
     }
 
     //写锁的降级问题
-    public static void readWrite(){
-        log.error("进入写锁===》{}",Thread.currentThread().getName());
+    public static void readWrite2(){
+        log.info("进入写锁===》{}",Thread.currentThread().getName());
         reentrantReadWriteLock.writeLock().lock();
 
-        log.error("获取到写锁===》{}",Thread.currentThread().getName());
-
+        log.error("获取到写锁===*********{}, 此时 count ----> {} ",Thread.currentThread().getName(),count);
         count++;
+        reentrantReadWriteLock.readLock().lock();
+
+
+        reentrantReadWriteLock.writeLock().unlock();
+        log.warn("释放写锁 ===********* {}",Thread.currentThread().getName());
         try {
-            Thread.sleep(5000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        reentrantReadWriteLock.readLock().lock();
-        log.warn("获取到读锁===》 {}",Thread.currentThread().getName());
-        log.warn("ThreadName:   ===>    " + Thread.currentThread().getName() + "线程值：===>" + count);
 
-        reentrantReadWriteLock.readLock().unlock();
-        log.warn("释放读锁===》 {}",Thread.currentThread().getName());
+        try{
+            log.debug("===打印==> count -------> {},{}       " ,count,Thread.currentThread().getName());
+        }
+        finally {
+            reentrantReadWriteLock.readLock().unlock();
+        }
 
-        log.error("===写锁打印==>" + count);
-        reentrantReadWriteLock.writeLock().unlock();
-        log.error("释放写锁===》 {}",Thread.currentThread().getName());
+    }
 
-
+    /**
+     * syc 可重入锁
+     */
+    public static void sycTest(){
+        synchronized (object){
+            log.info("1111111");
+            synchronized(object){
+                log.info("22222222");
+            }
+        }
     }
 }
