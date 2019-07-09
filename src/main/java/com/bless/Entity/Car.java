@@ -19,6 +19,7 @@ public class Car {
 
     private String color;
 
+
     @ManyToOne(optional = false)
     private Person person;
 

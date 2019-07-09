@@ -2,6 +2,8 @@ package com.bless;
 
 import com.alibaba.fastjson.JSONObject;
 //import com.bless.Elasticsearch.ESService;
+import com.bless.Entity.Citizen;
+import com.bless.Repository.CitizenRepository;
 import com.bless.Repository.TestRepository;
 import com.bless.Service.TestService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +25,7 @@ import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -62,6 +65,9 @@ public class Application implements CommandLineRunner{
     @Autowired
     private ObjectMapper objectMapper;
 
+//    @Autowired
+//    private CitizenRepository citizenRepository;
+
     @Bean
     public MongoTemplate mongoTemplate() throws Exception {
         // 去掉_class
@@ -99,6 +105,11 @@ public class Application implements CommandLineRunner{
 //        log.info(objectMapper.convertValue(ob,JSONObject.class).toJSONString());
 
 //        parseLetterTemplate("{{姓名}}肺功能检查结果为{{高危}}，情况危重需要立即处置。");
+
+//        for (int i = 0; i < 100000; i++) {
+//            citizenRepository.save(Citizen.of(null,"name--> " + i,null,null,new Date(),"" + i,"警察局","123","zhangsan",2131l,"beijingbeijing"));
+//        }
+
     }
 
     private void parseLetterTemplate(String letterTemplate){

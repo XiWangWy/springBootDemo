@@ -73,6 +73,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/webSocket/**").permitAll()
                 .antMatchers("/socket.io/**").permitAll()
                 .antMatchers("/es/**").permitAll()
+                .antMatchers("/mongo/**").permitAll()
 
 
                 //swagger
