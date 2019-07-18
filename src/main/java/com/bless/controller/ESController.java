@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.bless.Elasticsearch.ESRestService;
 import com.bless.Entity.Citizen;
 import com.bless.Repository.CitizenRepository;
+import com.bless.Service.RedisService;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class ESController {
     private ESRestService esRestService;
     @Autowired
     private CitizenRepository citizenRepository;
+    @Autowired
+    private RedisService redisService;
 
     @GetMapping("/citizen")
     public List<JSONObject> get(@RequestParam("name") String idName,
@@ -52,4 +55,26 @@ public class ESController {
             citizenRepository.save(Citizen.of(null,"name--> " + i,null,null,new Date(),"" + i,"警察局","123","zhangsan",2131l,"beijingbeijing"));
         }
     }
+
+    @PutMapping("/redis/{key}")
+    public String redisPut(@PathVariable(value = "key")String key) throws InterruptedException {
+        Boolean ok = redisService.put(key,key);
+        if (!ok){
+            return key + "正在被占用";
+        }
+        return "";
+    }
+
+    @GetMapping("/redis/{key}")
+    public String redis(@PathVariable(value = "key")String key) throws InterruptedException {
+        String s = redisService.get(key);
+        return s;
+    }
+
+
+    @GetMapping("/redis/refresh/{key}")
+    public void reRefresh(@PathVariable(value = "key")String key) throws InterruptedException {
+        redisService.refresh(key);
+    }
+
 }

@@ -24,6 +24,7 @@ import org.springframework.data.mongodb.core.convert.DefaultDbRefResolver;
 import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -40,6 +41,7 @@ import java.util.stream.Collectors;
 @EnableCaching
 @ServletComponentScan
 @EnableRabbit
+@EnableScheduling
 //@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 10)
 //@EnableJpaRepositories("com.bless.Repository")
 //@EntityScan("com.bless.Entity")
