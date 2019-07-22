@@ -38,6 +38,9 @@ targetCompatibility = 1.8
 
 dependencies {
 
+//    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    compileOnly "org.springframework.boot:spring-boot-configuration-processor"
+
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile("junit:junit")
 

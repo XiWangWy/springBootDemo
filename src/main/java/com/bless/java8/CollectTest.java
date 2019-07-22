@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
 
 /**
@@ -43,15 +44,18 @@ public class CollectTest<T,R> {
 //        }
 
 
-        Arrays.stream(DDD.class.getDeclaredFields()).forEach(field -> {
-            if (field.getType().getTypeName().equals(List.class.getTypeName())){
-                System.out.println(field.getType());
-            }
-        });
+//        Arrays.stream(DDD.class.getDeclaredFields()).forEach(field -> {
+//            if (field.getType().getTypeName().equals(List.class.getTypeName())){
+//                System.out.println(field.getType());
+//            }
+//        });
 
 
-
-
+        LongAdder longAdder = new LongAdder();
+        longAdder.increment();
+//        longAdder.decrement();
+        longAdder.intValue();
+        System.out.println(longAdder.intValue());
 
 //        String idName = "aaa";
 //        String ss = String.format("*%s*",idName);

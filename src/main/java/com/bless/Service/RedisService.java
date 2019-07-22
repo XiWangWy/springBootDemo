@@ -61,11 +61,11 @@ public class RedisService {
         return cacheMap.get(key);
     }
 
-    @Scheduled(fixedRate = 1000l)
-    public void printLock(){
-        RMapCache<String,String> cacheMap = redissonClient.getMapCache("test_wx");
-        cacheMap.forEach((key, value) -> log.info("设备{}{}",key,value));
-    }
+//    @Scheduled(fixedRate = 1000l)
+//    public void printLock(){
+//        RMapCache<String,String> cacheMap = redissonClient.getMapCache("test_wx");
+//        cacheMap.forEach((key, value) -> log.info("设备{}{}",key,value));
+//    }
 
 
     public void setKeepTime(Long keepTime) {

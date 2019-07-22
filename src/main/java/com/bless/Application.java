@@ -6,6 +6,7 @@ import com.bless.Entity.Citizen;
 import com.bless.Repository.CitizenRepository;
 import com.bless.Repository.TestRepository;
 import com.bless.Service.TestService;
+import com.bless.springbootAutoConfigureDemo.MyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -70,6 +71,9 @@ public class Application implements CommandLineRunner{
 //    @Autowired
 //    private CitizenRepository citizenRepository;
 
+    @Autowired
+    private MyService myService;
+
     @Bean
     public MongoTemplate mongoTemplate() throws Exception {
         // 去掉_class
@@ -81,7 +85,8 @@ public class Application implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
-
+        String hello = myService.sayHello();
+        System.out.println(hello);
 //        esService.test();
 //        testService.es();
 //        Test test = new Test();

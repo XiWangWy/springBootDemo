@@ -8,6 +8,7 @@ jwt:
         refresh: refresh
 
 
+
 spring:
   profiles:
     active: dev
@@ -99,6 +100,10 @@ logging:
     org.springframework.web: INFO
     org.springframework.data.mongodb.core: INFO
     org.springframework.data: INFO
+
+  #自定义自动配置启动项目
+wx-test:
+  msg: 自定义自动配置项输出信息
 
 
 
