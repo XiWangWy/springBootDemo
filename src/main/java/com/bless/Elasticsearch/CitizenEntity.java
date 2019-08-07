@@ -21,6 +21,7 @@ public class CitizenEntity extends BaseEntity{
     @ESMappingField(type = DataType.Nested)
     private List<CitizenChild> children;
 
+     @Data
      public static class CitizenChild {
         @ESMappingField(type = DataType.KeyWord)
         private String childName;

@@ -77,4 +77,5 @@ public class ESController {
         redisService.refresh(key);
     }
 
+
 }

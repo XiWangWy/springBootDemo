@@ -2,6 +2,8 @@ package com.bless;
 
 import com.alibaba.fastjson.JSONObject;
 //import com.bless.Elasticsearch.ESService;
+import com.bless.Elasticsearch.CitizenEntity;
+import com.bless.Elasticsearch.ESRestService;
 import com.bless.Entity.Citizen;
 import com.bless.Repository.CitizenRepository;
 import com.bless.Repository.TestRepository;
@@ -9,7 +11,9 @@ import com.bless.Service.TestService;
 import com.bless.springbootAutoConfigureDemo.MyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.hibernate.boot.model.source.internal.hbm.MappingDocument;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +33,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,17 +67,11 @@ public class Application implements CommandLineRunner{
     @Autowired
     private TestService testService;
 
-//    @Autowired
-//    private ESService esService;
+    @Autowired
+    private ESRestService esRestService;
 
     @Autowired
     private ObjectMapper objectMapper;
-
-//    @Autowired
-//    private CitizenRepository citizenRepository;
-
-    @Autowired
-    private MyService myService;
 
     @Bean
     public MongoTemplate mongoTemplate() throws Exception {
@@ -85,48 +84,28 @@ public class Application implements CommandLineRunner{
 
     @Override
     public void run(String... args) throws Exception {
-        String hello = myService.sayHello();
-        System.out.println(hello);
-//        esService.test();
-//        testService.es();
-//        Test test = new Test();
-//        test.setGender(Gender.famale);
-//        test.setName("测试");
-//        testRepository.save(test);
-//
-//        Test test1 = new Test();
-//        test1.setGender(Gender.male);
-//        test1.setName("测试1");
-//        testRepository.save(test1);
-//
-//        Test test2 = new Test();
-//        test2.setGender(Gender.unknow);
-//        test2.setName("测试3");
-//        testRepository.save(test2);
-//        log.info(Gender.unknow.name());
-//        log.info(""+Gender.unknow.ordinal());
+        CitizenEntity citizenEntity = new CitizenEntity();
+        citizenEntity.setIdNo(1234567L);
+        citizenEntity.setName("Bless-1号");
+        citizenEntity.setTags(Sets.newHashSet(1L,2L,3L,4L));
+        CitizenEntity.CitizenChild citizenChild = new CitizenEntity.CitizenChild();
+        citizenChild.setAge(19);
+        citizenChild.setChildName(citizenEntity.getName() + "的孩子");
 
-//        JSONObject ob = new JSONObject();
-//        ob.put("IdName","123");
-//        ob.put("PatientId","123");
-//        log.info(objectMapper.convertValue(ob,JSONObject.class).toJSONString());
+        CitizenEntity.CitizenChild citizenChild2 = new CitizenEntity.CitizenChild();
+        citizenChild2.setAge(20);
+        citizenChild2.setChildName(citizenEntity.getName() + "的第二个孩子");
+        citizenEntity.setChildren(Lists.newArrayList(citizenChild,citizenChild2));
 
-//        parseLetterTemplate("{{姓名}}肺功能检查结果为{{高危}}，情况危重需要立即处置。");
+        esRestService.createIndex("bless_citizen_demo2");
+        XContentBuilder xContentBuilder = esRestService.createMapping(CitizenEntity.class);
+        esRestService.putMapping("bless_citizen_demo2",xContentBuilder);
 
-//        for (int i = 0; i < 100000; i++) {
-//            citizenRepository.save(Citizen.of(null,"name--> " + i,null,null,new Date(),"" + i,"警察局","123","zhangsan",2131l,"beijingbeijing"));
-//        }
+
+
+        esRestService.insertData("bless_citizen_demo2","_doc",null,objectMapper.writeValueAsString(citizenEntity));
+
 
     }
-
-    private void parseLetterTemplate(String letterTemplate){
-        String regex = "\\{\\{([^}]*)}}";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(letterTemplate);
-        while (matcher.find()){
-            System.out.println(matcher.group().replaceAll(regex,"$1"));
-        }
-    }
-
 
 }

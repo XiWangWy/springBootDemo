@@ -10,6 +10,7 @@ public enum DataType {
     String,
     Nested,
     KeyWord,
+    Object,
     Text,
     Boolean,
     IP

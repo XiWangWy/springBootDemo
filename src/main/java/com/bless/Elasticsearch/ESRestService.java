@@ -13,6 +13,7 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -35,11 +36,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -143,11 +142,12 @@ public class ESRestService {
      * @param xContentBuilder
      * @return
      */
-    public Boolean putMapping(XContentBuilder xContentBuilder){
-        PutMappingRequest putMappingRequest = new PutMappingRequest();
+    public Boolean putMapping(String indexName,XContentBuilder xContentBuilder){
+        PutMappingRequest putMappingRequest = new PutMappingRequest(indexName);
         putMappingRequest.source(xContentBuilder);
         try {
-            return restHighLevelClient.indices().putMapping(putMappingRequest,RequestOptions.DEFAULT).isAcknowledged();
+            AcknowledgedResponse acknowledgedResponse  = restHighLevelClient.indices().putMapping(putMappingRequest,RequestOptions.DEFAULT);
+            return acknowledgedResponse.isAcknowledged();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -217,12 +217,12 @@ public class ESRestService {
      * @param baseEntity
      * @return
      */
-    public XContentBuilder createMapping(Class<? extends BaseEntity> baseEntity){
+    public XContentBuilder createMapping(Class<?> baseEntity){
         try {
             XContentBuilder xContentBuilder = XContentFactory.jsonBuilder();
 
             xContentBuilder.startObject();
-            createEntityMapping(xContentBuilder,baseEntity);
+            createEntityMapping(xContentBuilder.startObject("properties"),baseEntity).endObject();
             xContentBuilder.endObject();
             return xContentBuilder;
         } catch (IOException e) {
@@ -231,17 +231,48 @@ public class ESRestService {
         return null;
     }
 
-    private XContentBuilder createEntityMapping(XContentBuilder xContentBuilder,Class<? extends BaseEntity> baseEntity){
+    /**
+     * 构造es存储对象的结构
+     * @param builder
+     * @param baseEntity
+     * @return
+     * @throws IOException
+     */
+    private XContentBuilder createEntityMapping(XContentBuilder builder,Class<?> baseEntity) throws IOException {
         Field[] fields = baseEntity.getDeclaredFields();
         for (Field field : fields) {
             ESMappingField esMappingField = field.getAnnotation(ESMappingField.class);
+            if (Objects.isNull(esMappingField)) continue;
             DataType dataType = esMappingField.type();
-            switch (dataType){
 
+            if (dataType.equals(DataType.Nested)){
+                builder
+                        .startObject(field.getName())
+                        .field("type", dataType.name().toLowerCase());
+                //嵌套对象处理
+                if (Collection.class.isAssignableFrom(field.getType())){
+                    ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+                    Class<?> myClass = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+                    createEntityMapping(builder.startObject("properties"),myClass).endObject();
+                }else {
+                    createEntityMapping(builder.startObject("properties"),field.getType()).endObject();
+                }
+                builder.endObject();
+            }else if (dataType.equals(DataType.Object)){
+                //obj类型
+                builder.startObject(field.getName());
+                createEntityMapping(builder.startObject("properties"),field.getType()).endObject();
+                builder.endObject();
+            }else {
+                //普通字段处理
+                builder
+                        .startObject(field.getName())
+                        .field("type",dataType.name().toLowerCase())
+                        .endObject();
             }
         }
 
-        return null;
+        return builder;
     }
 
 

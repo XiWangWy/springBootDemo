@@ -8,7 +8,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.swagger.models.auth.In;
-import org.elasticsearch.common.collect.CopyOnWriteHashMap;
+//import org.elasticsearch.common.collect.CopyOnWriteHashMap;
+import org.apache.tomcat.util.net.NioChannel;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.ParameterizedType;
@@ -51,11 +52,19 @@ public class CollectTest<T,R> {
 //        });
 
 
-        LongAdder longAdder = new LongAdder();
-        longAdder.increment();
-//        longAdder.decrement();
-        longAdder.intValue();
-        System.out.println(longAdder.intValue());
+//        LongAdder longAdder = new LongAdder();
+//        longAdder.increment();
+////        longAdder.decrement();
+//        longAdder.intValue();
+//        System.out.println(longAdder.intValue());
+
+//        char ss = '涨';
+//        char ss1 = '张';
+//        System.out.println( ss - ss1);
+
+
+
+
 
 //        String idName = "aaa";
 //        String ss = String.format("*%s*",idName);
@@ -137,33 +146,89 @@ public class CollectTest<T,R> {
 //        object.put("fields",array);
 //
 //
-//        String alert = "SPO2\n" +
-//                "ECG\n" +
-//                "NIBP\n" +
-//                "CO2";
+        String alert = "SPO2\n" +
+                "ECG\n" +
+                "NIBP\n" +
+                "CO2\n" + "HR\n" +
+                "SpO2\n" +
+                "Dia\n" +
+                "PVCs\n" +
+                "PR\n" +
+                "Mean\n" +
+                "Sys\n" +
+                "RR\n" +
+                "awRR\n" +
+                "EtCO2\n" +
+                "FiCO2\n" +
+                "PEEP\n" +
+                "Ppeak\n" +
+                "Pplat\n" +
+                "Pmean\n" +
+                "VTe\n" +
+                "VTi\n" +
+                "VT/kg\n" +
+                "VTe spn\n" +
+                "VTapnea\n" +
+                "MVspn\n" +
+                "fapnea\n" +
+                "fSIMV\n" +
+                "fsigh\n" +
+                "Deltaint.PEEP\n" +
+                "F-Trigger\n" +
+                "Psupp\n" +
+                "Tinsp\n" +
+                "Pinsp\n" +
+                "Trise\n" +
+                "VT\n" +
+                "f\n" +
+                "Tpause\n" +
+                "IBW\n" +
+                "O2%\n" +
+                "MVe\n" +
+                "ftot\n" +
+                "fmand\n" +
+                "fspn\n" +
+                "MVleak\n" +
+                "FiO2\n" +
+                "Cstat\n" +
+                "Cdyn\n" +
+                "RSBI\n" +
+                "Exp%\n" +
+                "Ri\n" +
+                "Re\n" +
+                "RCexp\n" +
+                "NIF\n" +
+                "P0.1\n" +
+                "PEEPi\n" +
+                "NIBP M\n" +
+                "NIBP D\n" +
+                "NIBP S\n" +
+                "flowpeep\n" +
+                "pawpeep\n" +
+                "△int.PEEP";
+
+        String aaa[] = alert.split("\n");
+        JSONArray alertarray = new JSONArray();
+        for (String a: aaa) {
+            JSONObject objectalert = new JSONObject();
+            objectalert.put("name",a);
+            objectalert.put("code","quotaChinese");
+            alertarray.add(objectalert);
+        }
+
+        JSONObject objectalert = new JSONObject();
+        objectalert.put("name","体征报警");
+        objectalert.put("fields",alertarray);
 //
-//        String aaa[] = alert.split("\n");
-//        JSONArray alertarray = new JSONArray();
-//        for (String a: aaa) {
-//            JSONObject objectalert = new JSONObject();
-//            objectalert.put("name",a);
-//            objectalert.put("code","quotaChinese");
-//            alertarray.add(objectalert);
-//        }
 //
-//        JSONObject objectalert = new JSONObject();
-//        objectalert.put("name","体征报警");
-//        objectalert.put("fields",alertarray);
-//
-//
-//        JSONArray export = new JSONArray();
+        JSONArray export = new JSONArray();
 //        export.add(object);
-//        export.add(objectalert);
+        export.add(objectalert);
 //
 //        JSONObject exOb = new JSONObject();
 //        exOb.put("body-sign",export);
 //
-//        System.out.println(exOb.toJSONString());
+        System.out.println(objectalert.toJSONString());
 
 //        TreeMap treeMap = Maps.newTreeMap();
 //        String[] tabs = new String[]{"11","22","33"};
