@@ -67,21 +67,21 @@ public class CollectTest<T,R> {
 //        System.out.println( ss - ss1);
 
 
-        CitizenEntity citizenEntity = new CitizenEntity();
-        citizenEntity.setIdNo(1234567L);
-        citizenEntity.setName("Bless-1号");
-        citizenEntity.setTags(Sets.newHashSet(5L,6L));
-        CitizenEntity.CitizenChild citizenChild = new CitizenEntity.CitizenChild();
-        citizenChild.setAge(19);
-        citizenChild.setChildName(citizenEntity.getName() + "的孩子");
-
-        CitizenEntity.CitizenChild citizenChild2 = new CitizenEntity.CitizenChild();
-        citizenChild2.setAge(20);
-        citizenChild2.setChildName(citizenEntity.getName() + "的第三个孩子");
-        citizenEntity.setChildren(Lists.newArrayList(citizenChild,citizenChild2));
-
-
-        log.info(objectMapper.writeValueAsString(citizenEntity));
+//        CitizenEntity citizenEntity = new CitizenEntity();
+//        citizenEntity.setIdNo(1234567L);
+//        citizenEntity.setName("Bless-1号");
+//        citizenEntity.setTags(Sets.newHashSet(5L,6L));
+//        CitizenEntity.CitizenChild citizenChild = new CitizenEntity.CitizenChild();
+//        citizenChild.setAge(19);
+//        citizenChild.setChildName(citizenEntity.getName() + "的孩子");
+//
+//        CitizenEntity.CitizenChild citizenChild2 = new CitizenEntity.CitizenChild();
+//        citizenChild2.setAge(20);
+//        citizenChild2.setChildName(citizenEntity.getName() + "的第三个孩子");
+//        citizenEntity.setChildren(Lists.newArrayList(citizenChild,citizenChild2));
+//
+//
+//        log.info(objectMapper.writeValueAsString(citizenEntity));
 
 //        String idName = "aaa";
 //        String ss = String.format("*%s*",idName);
