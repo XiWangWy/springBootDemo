@@ -1,10 +1,13 @@
 package com.bless.Elasticsearch;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -25,9 +28,12 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.WildcardQueryBuilder;
+import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.aggregations.AggregationBuilder;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.terms.*;
+import org.elasticsearch.search.aggregations.support.ValueType;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.FetchSourceContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -275,11 +281,114 @@ public class ESRestService {
         return builder;
     }
 
+    /**
+     * 根据名字查询
+     * @param name
+     * @return
+     * @throws IOException
+     */
+    public List<CitizenEntity> searchChildByName(String name,String index,String doc) throws IOException {
+        SearchRequest searchRequest = new SearchRequest();
 
 
-//    public String getData(String indexName,String doc,String id){
-//        GetRequest getRequest = new GetRequest(indexName,doc,id);
-//        getRequest.fetchSourceContext(new FetchSourceContext(true,new String[]{},new String[]{}));
-//    }
+        TermQueryBuilder termQueryBuilder = new TermQueryBuilder("children.childName",name);
+
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+        boolQueryBuilder.must(termQueryBuilder);
+
+        //查找孩子的名字
+        NestedQueryBuilder nestedQueryBuilder = new NestedQueryBuilder("children",boolQueryBuilder,ScoreMode.None);
+
+
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(nestedQueryBuilder);
+        log.info(searchSourceBuilder.toString());
+
+        searchRequest.source(searchSourceBuilder);
+        searchRequest.indices(index);
+        searchRequest.types(doc);
+
+       SearchResponse searchResponse =  restHighLevelClient.search(searchRequest,RequestOptions.DEFAULT);
+       return  Arrays.stream(searchResponse.getHits().getHits()).map(hit -> {
+           try {
+               String citizenStr = objectMapper.writeValueAsString(hit.getSourceAsMap());
+               return JSON.parseObject(citizenStr,CitizenEntity.class);
+           } catch (JsonProcessingException e) {
+               e.printStackTrace();
+           }
+           return null;
+       }).collect(Collectors.toList());
+    }
+
+    /**
+     * 根据名字查询
+     * @param
+     * @return
+     * @throws IOException
+     */
+    public List<CitizenEntity> searchTags(String index,String doc) throws IOException {
+        SearchRequest searchRequest = new SearchRequest();
+
+
+        TermsQueryBuilder termsQueryBuilder = new TermsQueryBuilder("tags", Lists.newArrayList(1,2,3,4));
+
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+        boolQueryBuilder.must(termsQueryBuilder);
+
+        //查找孩子的名字
+//        NestedQueryBuilder nestedQueryBuilder = new NestedQueryBuilder("tags",boolQueryBuilder,ScoreMode.None);
+
+
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(boolQueryBuilder);
+        log.info(searchSourceBuilder.toString());
+
+        //根据查询结果做聚合操作
+        TermsAggregationBuilder termsAggregationBuilder = new TermsAggregationBuilder("allName",ValueType.STRING);
+        termsAggregationBuilder.field("name").size(Integer.MAX_VALUE);
+        searchSourceBuilder.aggregation(termsAggregationBuilder);
+
+
+        searchRequest.source(searchSourceBuilder);
+        searchRequest.indices(index);
+        searchRequest.types(doc);
+
+
+
+
+        SearchResponse searchResponse =  restHighLevelClient.search(searchRequest,RequestOptions.DEFAULT);
+
+//        searchResponse.getAggregations().asMap().entrySet().stream().forEach(entry -> {
+//            ParsedStringTerms parsedStringTerms = (ParsedStringTerms) entry.getValue();
+//            Map<Object,Long> map = getAggregationMap(parsedStringTerms);
+//        });
+
+
+
+
+
+        return  Arrays.stream(searchResponse.getHits().getHits()).map(hit -> {
+            try {
+                String citizenStr = objectMapper.writeValueAsString(hit.getSourceAsMap());
+                return JSON.parseObject(citizenStr,CitizenEntity.class);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }).collect(Collectors.toList());
+    }
+
+    /**
+     * h获取聚合中统计信息
+     * @param parsedTerms
+     * @return
+     */
+    private Map<Object,Long> getAggregationMap(ParsedTerms parsedTerms){
+        return parsedTerms.getBuckets()
+                .stream()
+                .collect(Collectors.toMap(Terms.Bucket::getKeyAsString,Terms.Bucket::getDocCount));
+    }
 
 }

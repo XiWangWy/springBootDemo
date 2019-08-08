@@ -33,6 +33,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -70,8 +71,7 @@ public class Application implements CommandLineRunner{
     @Autowired
     private ESRestService esRestService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Bean
     public MongoTemplate mongoTemplate() throws Exception {
@@ -87,25 +87,27 @@ public class Application implements CommandLineRunner{
         CitizenEntity citizenEntity = new CitizenEntity();
         citizenEntity.setIdNo(1234567L);
         citizenEntity.setName("Bless-1号");
-        citizenEntity.setTags(Sets.newHashSet(1L,2L,3L,4L));
+        citizenEntity.setTags(Sets.newHashSet(5L,6L));
         CitizenEntity.CitizenChild citizenChild = new CitizenEntity.CitizenChild();
         citizenChild.setAge(19);
         citizenChild.setChildName(citizenEntity.getName() + "的孩子");
 
         CitizenEntity.CitizenChild citizenChild2 = new CitizenEntity.CitizenChild();
         citizenChild2.setAge(20);
-        citizenChild2.setChildName(citizenEntity.getName() + "的第二个孩子");
+        citizenChild2.setChildName(citizenEntity.getName() + "的第三个孩子");
         citizenEntity.setChildren(Lists.newArrayList(citizenChild,citizenChild2));
+//
+//        esRestService.createIndex("bless");
+//        XContentBuilder xContentBuilder = esRestService.createMapping(CitizenEntity.class);
+//        esRestService.putMapping("bless",xContentBuilder);
+//
+//
+//
+        esRestService.insertData("bless","_doc",null,objectMapper.writeValueAsString(citizenEntity));
 
-        esRestService.createIndex("bless_citizen_demo2");
-        XContentBuilder xContentBuilder = esRestService.createMapping(CitizenEntity.class);
-        esRestService.putMapping("bless_citizen_demo2",xContentBuilder);
 
-
-
-        esRestService.insertData("bless_citizen_demo2","_doc",null,objectMapper.writeValueAsString(citizenEntity));
-
-
+        List<CitizenEntity> citizenEntities  = esRestService.searchTags("bless","_doc");
+        citizenEntities.forEach(entity -> System.out.println(entity.toString()));
     }
 
 }

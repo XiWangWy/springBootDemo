@@ -27,5 +27,24 @@ public class CitizenEntity extends BaseEntity{
         private String childName;
         @ESMappingField(type = DataType.Integer)
         private Integer age;
+
+         @Override
+         public String toString() {
+             return "CitizenChild{" +
+                     "childName='" + childName + '\'' +
+                     ", age=" + age +
+                     '}';
+         }
+
+     }
+
+    @Override
+    public String toString() {
+        return "CitizenEntity{" +
+                "name='" + name + '\'' +
+                ", idNo=" + idNo +
+                ", tags=" + tags +
+                ", children=" + children.toString() +
+                '}';
     }
 }
