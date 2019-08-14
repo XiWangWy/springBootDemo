@@ -179,7 +179,7 @@ public class ESRestService {
         try {
             IndexResponse indexResponse = restHighLevelClient.index(indexRequest,RequestOptions.DEFAULT);
             if (indexResponse.getResult().equals(DocWriteResponse.Result.CREATED)){
-                log.info("索引--> {}, 文档--> {},内容--> {},ID--> {}   【插入成功】",indexName,doc,content,indexResponse.getId());
+                log.info("【插入成功】 索引--> {}, 文档--> {},内容--> {},ID--> {}  ",indexName,doc,content,indexResponse.getId());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -197,7 +197,7 @@ public class ESRestService {
         try {
             DeleteResponse deleteResponse = restHighLevelClient.delete(deleteRequest,RequestOptions.DEFAULT);
             if (deleteResponse.getResult().equals(DocWriteResponse.Result.DELETED)){
-                log.info("索引--> {}, 文档--> {},ID--> {}   【删除成功】",indexName,doc,deleteResponse.getId());
+                log.info("【删除成功】 索引--> {}, 文档--> {},ID--> {}   ",indexName,doc,deleteResponse.getId());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -217,13 +217,21 @@ public class ESRestService {
         try {
             UpdateResponse updateResponse = restHighLevelClient.update(updateRequest,RequestOptions.DEFAULT);
             if (updateResponse.getResult().equals(DocWriteResponse.Result.UPDATED)){
-                log.info("索引--> {}, 文档--> {},内容--> {},ID--> {}   【更新成功】",indexName,doc,content,updateResponse.getId());
+                log.info("【更新成功】 索引--> {}, 文档--> {},内容--> {},ID--> {}   ",indexName,doc,content,updateResponse.getId());
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * 通过ES 脚本进行局部更新
+     * @param indexName
+     * @param ids
+     * @param field
+     * @param value
+     * @throws JsonProcessingException
+     */
     public void updateByQueryAdd(String indexName,Collection<String> ids,String field,Object value) throws JsonProcessingException {
         JSONObject jsonObject = JSONObject.parseObject(objectMapper.writeValueAsString(value));
         Map params = Maps.newHashMap();
