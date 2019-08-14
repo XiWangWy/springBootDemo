@@ -16,9 +16,9 @@ public class ESRestClientConfig {
     public RestHighLevelClient createRestClient(){
         return new RestHighLevelClient(
                 RestClient.builder(
-                       new HttpHost("localhost",9200,"http")
-//                        new HttpHost("localhost",8200,"http"),
-//                        new HttpHost("localhost",8000,"http")
+                       new HttpHost("localhost",9200,"http"),
+                        new HttpHost("localhost",8200,"http"),
+                        new HttpHost("localhost",8000,"http")
                 )
         );
     }

@@ -86,28 +86,32 @@ public class Application implements CommandLineRunner{
     public void run(String... args) throws Exception {
         CitizenEntity citizenEntity = new CitizenEntity();
         citizenEntity.setIdNo(1234567L);
-        citizenEntity.setName("Bless-1号");
+        citizenEntity.setName("ZHHHHHHH");
         citizenEntity.setTags(Sets.newHashSet(5L,6L));
-        CitizenEntity.CitizenChild citizenChild = new CitizenEntity.CitizenChild();
-        citizenChild.setAge(19);
-        citizenChild.setChildName(citizenEntity.getName() + "的孩子");
+
+
+//        CitizenEntity.CitizenChild citizenChild = new CitizenEntity.CitizenChild();
+//        citizenChild.setAge(19);
+//        citizenChild.setChildName(citizenEntity.getName() + "disan");
 
         CitizenEntity.CitizenChild citizenChild2 = new CitizenEntity.CitizenChild();
         citizenChild2.setAge(20);
-        citizenChild2.setChildName(citizenEntity.getName() + "的第三个孩子");
-        citizenEntity.setChildren(Lists.newArrayList(citizenChild,citizenChild2));
-//
+        citizenChild2.setChildName(citizenEntity.getName() + "ZHHH");
+        citizenEntity.setChildren(Lists.newArrayList(citizenChild2));
+////
 //        esRestService.createIndex("bless");
 //        XContentBuilder xContentBuilder = esRestService.createMapping(CitizenEntity.class);
 //        esRestService.putMapping("bless",xContentBuilder);
+////
 //
 //
+//        esRestService.insertData("bless","_doc",null,objectMapper.writeValueAsString(citizenEntity));
 //
-        esRestService.insertData("bless","_doc",null,objectMapper.writeValueAsString(citizenEntity));
-
-
-        List<CitizenEntity> citizenEntities  = esRestService.searchTags("bless","_doc");
-        citizenEntities.forEach(entity -> System.out.println(entity.toString()));
+//        esRestService.updateData("bless","_doc","CTMniWwBWPGH8DUG2Zlz",objectMapper.writeValueAsString(citizenEntity));
+//
+        esRestService.updateByQueryAdd("bless",Lists.newArrayList("WNR4jmwBfoivG-m178NY"),"children",citizenChild2);
+//        List<CitizenEntity> citizenEntities  = esRestService.searchTags("bless","_doc");
+//        citizenEntities.forEach(entity -> System.out.println(entity.toString()));
     }
 
 }

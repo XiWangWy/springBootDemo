@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.lucene.search.join.ScoreMode;
@@ -25,10 +26,15 @@ import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.client.indices.PutMappingRequest;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.*;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.UpdateByQueryRequest;
+import org.elasticsearch.script.Script;
+import org.elasticsearch.script.ScriptType;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
@@ -118,7 +124,7 @@ public class ESRestService {
         CreateIndexRequest createIndexRequest = new CreateIndexRequest(indexName);
         createIndexRequest.settings(Settings.builder()
                 .put("index.number_of_shards", 3)
-                .put("index.number_of_replicas", 2)
+                .put("index.number_of_replicas", 1)
         );
         try {
             restHighLevelClient.indices().create(createIndexRequest,RequestOptions.DEFAULT);
@@ -213,6 +219,36 @@ public class ESRestService {
             if (updateResponse.getResult().equals(DocWriteResponse.Result.UPDATED)){
                 log.info("索引--> {}, 文档--> {},内容--> {},ID--> {}   【更新成功】",indexName,doc,content,updateResponse.getId());
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateByQueryAdd(String indexName,Collection<String> ids,String field,Object value) throws JsonProcessingException {
+        JSONObject jsonObject = JSONObject.parseObject(objectMapper.writeValueAsString(value));
+        Map params = Maps.newHashMap();
+        params.put("new_field",jsonObject);
+
+        UpdateByQueryRequest updateByQueryRequest = new UpdateByQueryRequest(indexName);
+        updateByQueryRequest.setQuery(QueryBuilders.termsQuery("_id",ids));
+        updateByQueryRequest.setConflicts("proceed");
+        updateByQueryRequest.setScript(
+                new Script(
+                        ScriptType.INLINE, "painless",
+                        " ctx._source." + field + ".add(params.new_field)",
+                        params));
+        try {
+            BulkByScrollResponse bulkResponse =  restHighLevelClient.updateByQuery(updateByQueryRequest,RequestOptions.DEFAULT);
+            TimeValue timeTaken = bulkResponse.getTook();
+            boolean timedOut = bulkResponse.isTimedOut();
+            long totalDocs = bulkResponse.getTotal();
+            long updatedDocs = bulkResponse.getUpdated();
+            long deletedDocs = bulkResponse.getDeleted();
+            long batches = bulkResponse.getBatches();
+            long noops = bulkResponse.getNoops();
+            long versionConflicts = bulkResponse.getVersionConflicts();
+            log.info("局部更新文档使用Script ---> 花费时间：" + timeTaken + ",是否超时：" + timedOut + ",总文档数：" + totalDocs + ",更新数：" +
+                    updatedDocs + ",删除数：" + deletedDocs + ",批量次数：" + batches + ",跳过数：" + noops + ",冲突数：" + versionConflicts);
         } catch (IOException e) {
             e.printStackTrace();
         }
